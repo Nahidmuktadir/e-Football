@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071120">
+<title>eFootball • Arrow Practice</title>
+<style>
+:root{--bg:#070e1b;--surface:#101c2e;--surface2:#16263b;--border:#314158;--text:#edf5ff;--muted:#a5bad0;--cyan:#50e0ff;--mint:#70efbb;--gold:#ffe082;--red:#ff8193;--shadow:0 18px 48px #0005}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:radial-gradient(ellipse at 85% 0%,#13314c 0,transparent 42%),radial-gradient(ellipse at -10% 32%,#173642 0,transparent 42%),var(--bg);font-family:system-ui,"Noto Sans Bengali","Hind Siliguri",Arial,sans-serif;min-height:100vh}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}button:disabled{cursor:not-allowed;opacity:.5}
+.app{max-width:1100px;margin:0 auto;padding:22px clamp(12px,4vw,32px) 50px}
+header{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap}
+.kicker{font-size:11px;letter-spacing:2.5px;color:var(--mint);font-weight:800;text-transform:uppercase}
+h1{font-size:clamp(23px,4.8vw,37px);line-height:1.18;margin:7px 0 4px;letter-spacing:-.8px}header p,.hint{color:var(--muted);font-size:13px;margin:0;line-height:1.7}
+.status-pill{border:1px solid #3b6378;border-radius:100px;padding:9px 13px;color:var(--cyan);font-size:12px;font-weight:800;background:#112738}
+.main{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(300px,.94fr);gap:16px;align-items:start}
+.panel{background:linear-gradient(145deg,#122238,#0d1728);border:1px solid var(--border);border-radius:21px;box-shadow:var(--shadow);padding:20px;min-width:0}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}.section-title h2{font-size:17px;margin:0}.section-title span{font-size:12px;color:var(--muted)}
+.label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:700}
+.skill-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.skill-option,.direction,.secondary,.tab,.ghost{border:1px solid var(--border);background:#182940;color:var(--text);border-radius:12px;padding:10px 8px;font-weight:700;transition:background .15s,border-color .15s}
+.skill-option{min-height:54px;text-align:left}.skill-option small{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:2px}
+.skill-option.active,.direction.active{border-color:var(--cyan);background:#174056;box-shadow:inset 0 0 0 1px #50e0ff50}
+.mode-line{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:19px;margin-bottom:8px}
+.direction{width:54px;height:49px;font-size:25px;padding:0}.direction.active{color:var(--cyan)}
+.small-tag{color:var(--mint);background:#103d39;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:800}
+.field{margin-top:16px}
+.diagram{border-radius:16px;min-height:176px;position:relative;background:repeating-linear-gradient(90deg,#12573b,#12573b 36px,#115237 36px,#115237 72px);border:2px solid #ffffff27;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.diagram:before{content:"";position:absolute;inset:13px;border:2px solid #ffffff42;border-radius:3px;pointer-events:none}
+.diagram:after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:2px solid #ffffff25}
+.ball{font-size:31px;position:relative;z-index:2;background:#145b87aa;border-radius:100%;width:65px;height:65px;display:grid;place-items:center;transform:translateY(10px)}
+.travel{position:absolute;z-index:3;top:calc(50% - 53px);left:calc(50% + 15px);transform:rotate(0deg);font-size:57px;color:var(--gold);font-weight:900;text-shadow:0 0 10px #141d1d}
+.run-note{position:absolute;bottom:13px;right:18px;background:#051b17b8;border:1px solid #d8fff044;padding:5px 9px;border-radius:8px;font-weight:700;font-size:12px}
+.training-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}.step{border:1px solid var(--border);border-radius:13px;padding:13px 10px;min-height:104px;background:#0b1728;text-align:center}.step.current{border-color:var(--cyan);background:#143249}.step.done{border-color:var(--mint);background:#14362e}.step .step-name{font-size:12px;color:var(--muted)}.step .value{font-size:clamp(29px,4vw,38px);font-weight:900;margin-top:4px;line-height:1.2}.step .sub{font-size:11px;color:var(--muted);margin-top:5px}.step .value.tap{font-size:22px;padding-top:7px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:5px 0 10px;justify-items:center}
+.control-head{text-align:center;font-size:12px;font-weight:800;margin-bottom:7px}.pad{width:min(100%,185px);aspect-ratio:1;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;border:2px solid #6b8bab78;background:radial-gradient(circle at 35% 25%,#325575,#15293d 67%,#081725);box-shadow:inset 0 4px 18px #0007,0 8px 22px #0004;transition:border-color .13s,transform .13s}
+.pad.dash{border-color:#3cc9ed70;background:radial-gradient(circle at 30% 20%,#237e9d,#133450 60%,#091b2c)}.pad.ready{border-color:var(--mint)}.pad.engaged{transform:scale(.97);border-color:var(--gold)}.pad.inactive{opacity:.55}
+.pad .ring{border-radius:50%;width:47%;height:47%;border:1px solid #a8defe5c;display:flex;align-items:center;justify-content:center;background:#b9dffa1c;color:#d0ebff;font-size:14px;font-weight:800;pointer-events:none}
+.pad .dir-marker{position:absolute;font-size:22px;color:#c7e2f0aa;pointer-events:none}.up{top:7%}.down{bottom:7%}.left{left:8%}.right{right:8%}
+.pad .trace{position:absolute;pointer-events:none;font-size:42px;font-weight:900;color:var(--gold);text-shadow:0 3px 13px #0009;opacity:0;transition:opacity .12s}.pad .trace.visible{opacity:1}
+.feedback{min-height:44px;padding:10px 12px;border-radius:12px;border:1px solid #476783;background:#172b40;color:#daecf9;font-size:13px;line-height:1.65;margin:12px 0}
+.feedback.good{background:#133d31;border-color:#3cc995;color:#d6ffe8}.feedback.bad{background:#472331;border-color:#f17c93;color:#ffe2e6}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.primary{border:0;background:linear-gradient(120deg,#62e7ff,#52baee);color:#041727;font-weight:900;border-radius:11px;padding:12px 17px}.secondary{padding:11px 14px}.actions button{flex:1}
+.switchline{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;color:var(--text);margin-top:13px}.switchline input{width:17px;height:17px;accent-color:#5ee3f7}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:#0b1a2b;border:1px solid var(--border);border-radius:12px;text-align:center;padding:14px 8px}.stat strong{display:block;color:var(--gold);font-size:27px}.stat span{font-size:11px;color:var(--muted)}
+.progress-track{height:10px;border-radius:40px;overflow:hidden;background:#23374a;margin:11px 0 8px}.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#45cbe9,#81edaf);border-radius:40px;transition:width .3s}
+.notes{line-height:1.75;font-size:13px;color:#d4e2f0}.notes strong{color:#fff}.notes ul{margin:7px 0 0;padding-left:21px}.notes li{margin-bottom:6px}.rule{border-top:1px solid var(--border);padding-top:13px;margin-top:14px}
+button:focus{outline-offset:2px}.top-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.top-actions .secondary{font-size:12px;padding:8px 11px}
+.warning{border:1px solid #806a3c;background:#352c1c;padding:11px;border-radius:10px;color:#ffe7b4;line-height:1.6;font-size:12px;margin-top:14px}
+footer{font-size:11px;line-height:1.7;color:var(--muted);text-align:center;padding-top:18px}
+@media(max-width:730px){.main{grid-template-columns:1fr}.panel{padding:16px}.controls .pad{width:min(100%,167px)}header{margin-bottom:14px}.skill-list{gap:7px}.skill-option{min-height:51px}.app{padding-top:15px}}
+@media(max-width:370px){.control-head{font-size:11px}.pad{max-width:144px}.step .value{font-size:26px}.stat strong{font-size:21px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div><div class="kicker">⚽ MOBILE TRAINING LAB •<i>by Nahid</i></div><h1>Arrow & Feint Practice</h1><p>Virtual Joystick + Advanced Feint • প্রতিদিন ৫–১০ মিনিট অনুশীলন</p></div>
+  <div class="status-pill">● Offline HTML • Save locally</div>
+</header>
+<div class="main">
+<section class="panel" aria-label="অনুশীলন নির্বাচন">
+ <div class="section-title"><h2>① Skill বেছে নাও</h2><span>৪টি মূল প্যাটার্ন</span></div>
+ <div class="skill-list" id="skillList">
+  <button class="skill-option active" data-skill="double">Double Touch<small>পাশে → সামনে</small></button>
+  <button class="skill-option" data-skill="marseille">Marseille Turn<small>সামনে → পাশে</small></button>
+  <button class="skill-option" data-skill="draw">Draw & Open<small>পিছনে → পাশে</small></button>
+  <button class="skill-option" data-skill="chop">Chop Turn<small>Tap → পাশে</small></button>
+ </div>
+ <div class="field">
+  <div class="section-title" style="margin-bottom:8px"><h2>② Player কোন দিকে যাচ্ছে?</h2><span>দিক বদলে দেখো</span></div>
+  <div class="mode-line" id="directionList" role="group" aria-label="খেলোয়াড়ের চলার দিক">
+   <button class="direction" data-direction="up" aria-label="উপরে">↑</button>
+   <button class="direction" data-direction="left" aria-label="বামে">←</button>
+   <button class="direction" data-direction="down" aria-label="নিচে">↓</button>
+   <button class="direction active" data-direction="right" aria-label="ডানে">→</button>
+  </div>
+  <div class="diagram" aria-label="মাঠে খেলোয়াড়ের চলার দিক"><div class="ball">⚽</div><div class="travel" id="travelArrow">➜</div><span class="run-note" id="headingText">চলার দিক →</span></div>
+ </div>
+ <div class="field">
+  <div class="section-title"><h2>③ Thumb practice</h2><span class="small-tag" id="phaseLabel">ধাপ ১ / ২</span></div>
+  <p class="hint">আগে ডান পাশের <b>Dash</b> বৃত্তে swipe/tap, তারপর বাম পাশের <b>Joystick</b> বৃত্তে swipe করো।</p>
+  <div class="steps">
+   <div class="step current" id="dashStep"><div class="step-name">১ • DASH / FEINT</div><div class="value" id="dashTarget">↑ / ↓</div><div class="sub" id="dashSub">Swipe</div></div>
+   <div class="step" id="joyStep"><div class="step-name">২ • JOYSTICK</div><div class="value" id="joyTarget">→</div><div class="sub">দিক বরাবর Swipe</div></div>
+  </div>
+  <div class="controls">
+   <div style="width:100%;display:flex;flex-direction:column;align-items:center"><div class="control-head">🕹️ বাম হাত • JOYSTICK</div><div class="pad inactive" id="joystick" role="button" tabindex="0" aria-label="Joystick - দ্বিতীয় ধাপ"><span class="dir-marker up">↑</span><span class="dir-marker down">↓</span><span class="dir-marker left">←</span><span class="dir-marker right">→</span><span class="ring">MOVE</span><span class="trace" id="joystickTrace"></span></div></div>
+   <div style="width:100%;display:flex;flex-direction:column;align-items:center"><div class="control-head">⚡ ডান হাত • DASH</div><div class="pad dash ready" id="dash" role="button" tabindex="0" aria-label="Dash - প্রথম ধাপ"><span class="dir-marker up">↑</span><span class="dir-marker down">↓</span><span class="dir-marker left">←</span><span class="dir-marker right">→</span><span class="ring">DASH</span><span class="trace" id="dashTrace"></span></div></div>
+  </div>
+  <div class="feedback" id="feedback" role="status" aria-live="polite">প্রথমে Dash-এ দেখানো arrow অনুযায়ী আঙুল সরাও।</div>
+  <div class="actions"><button class="secondary" id="retry">↻ আবার চেষ্টা</button><button class="primary" id="random">🎲 নতুন চ্যালেঞ্জ</button></div>
+  <label class="switchline"><input type="checkbox" id="challenge"> চ্যালেঞ্জ মোড: অনুশীলনের সময় arrow লুকাবে</label>
+  <p class="hint" style="margin-top:8px">Swipe কাজ না করলে বৃত্তের ওপর আঙুল রেখে অন্তত 25–30px সরাও। কম্পিউটারেও Mouse drag দিয়ে চেষ্টা করতে পারো।</p>
+ </div>
+</section>
+<aside class="panel" aria-label="দৈনিক অগ্রগতি ও নির্দেশনা">
+ <div class="section-title"><h2>আজকের প্র্যাকটিস</h2><span id="todayDate"></span></div>
+ <div class="stats">
+  <div class="stat"><strong id="correctCount">0</strong><span>সঠিক Combo</span></div>
+  <div class="stat"><strong id="wrongCount">0</strong><span>ভুল Input</span></div>
+  <div class="stat"><strong id="streakCount">0</strong><span>একটানা সঠিক</span></div>
+ </div>
+ <div class="field"><div class="training-top"><strong style="font-size:13px">দৈনিক লক্ষ্য</strong><span class="hint" id="goalText">0 / 20 Combo</span></div><div class="progress-track"><div class="progress-fill" id="goalProgress"></div></div><div class="hint" id="goalMessage">প্রতিদিন ২০টি combo শেষ করো।</div></div>
+ <div class="field rule">
+  <div class="section-title"><h2>Arrow স্মরণে রাখো</h2><span>Player-নির্ভর</span></div>
+  <div class="notes" id="legendText"></div>
+ </div>
+ <div class="field rule">
+  <h2 style="font-size:15px;margin:0 0 6px">Skill Notes</h2>
+  <div class="notes" id="skillNote"></div>
+ </div>
+ <div class="field rule">
+  <h2 style="font-size:15px;margin:0 0 6px">প্রতিদিনের রুটিন</h2>
+  <div class="notes"><ul><li>৫টি Double Touch combo</li><li>৫টি Marseille Turn combo</li><li>৫টি Draw & Open combo</li><li>৫টি Chop Turn combo</li><li>তারপর গেমের Training mode-এ player দিয়ে চেষ্টা করো</li></ul></div>
+ </div>
+ <div class="warning"><b>গুরুত্বপূর্ণ:</b> এটি আঙুল ও দিকনির্দেশ অনুশীলনের সিমুলেটর। এখানে দেখানো simplified patterns দিয়ে গেমে সবসময় একই skill animation হবে—এমন নিশ্চয়তা নেই। আসল eFootball-এ command version, Player Skill, direction ও timing অনুযায়ী ফল বদলাতে পারে।</div>
+ <div class="top-actions" style="margin-top:15px"><button class="secondary" id="resetStats">আজকের পরিসংখ্যান মুছো</button><button class="secondary" id="showHelp">নিয়ম আবার দেখাও</button></div>
+</aside>
+</div>
+<footer>ব্যক্তিগত অনুশীলনের জন্য তৈরি • কোনো অ্যাকাউন্ট বা ইন্টারনেট প্রয়োজন নেই • অগ্রগতি এই ব্রাউজারের localStorage-এ থাকে</footer>
+</div>
+<script>
+(function(){
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const vecs={right:[1,0],left:[-1,0],up:[0,-1],down:[0,1]};
+ const glyph={"1,0":"→","-1,0":"←","0,-1":"↑","0,1":"↓"};
+ const g=v=>glyph[v.join(',')]||'?';
+ const names={double:'Double Touch',marseille:'Marseille Turn',draw:'Draw & Open',chop:'Chop Turn'};
+ const notes={
+  double:'Dash-এ player-এর চলার দিকের এক পাশে Swipe → Joystick সামনে। বিশেষ Double Touch animation-এর জন্য player-এর Double Touch Skill দরকার হতে পারে।',
+  marseille:'Dash সামনে → Joystick এক পাশে। Player-এর Marseille Turn Skill ও timing special spin animation-এ ভূমিকা রাখে।',
+  draw:'Dash পিছনে → Joystick পাশে। এটি একটি দিকনির্দেশ-ভিত্তিক draw-and-open exercise; গেমের নির্দিষ্ট animation player ও settings অনুযায়ী বদলাতে পারে।',
+  chop:'Dash-এ Tap → Joystick পাশে। Chop Turn skill/player variation অনুযায়ী আসল game command ও animation যাচাই করো।'
+ };
+ const state={skill:'double',direction:'right',phase:0,challenge:false,stats:{correct:0,wrong:0,streak:0}};
+ const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
+ const key=()=>`ef_arrow_training_${today()}`;
+ const load=()=>{try{const value=JSON.parse(localStorage.getItem(key())||'{}'); for(const n of ['correct','wrong','streak'])state.stats[n]=Math.max(0,Number(value[n])||0)}catch(e){}};
+ const save=()=>{try{localStorage.setItem(key(),JSON.stringify(state.stats))}catch(e){}};
+ const neg=v=>[-v[0],-v[1]];
+ const perps=v=>[[v[1],-v[0]],[-v[1],v[0]]];
+ function expected(){const v=vecs[state.direction],sides=perps(v);switch(state.skill){
+  case 'double':return {dash:sides,joy:[v],tap:false};
+  case 'marseille':return {dash:[v],joy:sides,tap:false};
+  case 'draw':return {dash:[neg(v)],joy:sides,tap:false};
+  case 'chop':return {dash:[],joy:sides,tap:true};
+ }}
+ const show=a=>a.map(g).join(' / ');
+ function render(){
+  for(const el of document.querySelectorAll('[data-direction]')){el.classList.toggle('active',el.dataset.direction===state.direction);el.setAttribute('aria-pressed',el.dataset.direction===state.direction)}
+  for(const el of document.querySelectorAll('[data-skill]')){el.classList.toggle('active',el.dataset.skill===state.skill);el.setAttribute('aria-pressed',el.dataset.skill===state.skill)}
+  const angle={right:0,down:90,left:180,up:270}[state.direction];$('travelArrow').style.transform=`rotate(${angle}deg)`;$('headingText').textContent=`চলার দিক ${g(vecs[state.direction])}`;
+  const e=expected();$('dashTarget').textContent=state.challenge&&state.phase!==2?'?':e.tap?'Tap':show(e.dash);
+  $('dashTarget').classList.toggle('tap',e.tap);$('dashSub').textContent=e.tap?'একবার Tap করো':'Dash-এর ওপর Swipe করো';
+  $('joyTarget').textContent=state.challenge&&state.phase!==2?'?':show(e.joy);
+  $('phaseLabel').textContent=state.phase===2?'✅ সম্পন্ন':`ধাপ ${state.phase+1} / ২`;
+  $('dashStep').className='step '+(state.phase===0?'current':state.phase>=1?'done':'');
+  $('joyStep').className='step '+(state.phase===1?'current':state.phase===2?'done':'');
+  $('dash').classList.toggle('inactive',state.phase!==0);$('dash').classList.toggle('ready',state.phase===0);
+  $('joystick').classList.toggle('inactive',state.phase!==1);$('joystick').classList.toggle('ready',state.phase===1);
+  const s=state.stats;$('correctCount').textContent=s.correct;$('wrongCount').textContent=s.wrong;$('streakCount').textContent=s.streak;
+  $('goalText').textContent=`${Math.min(20,s.correct)} / 20 Combo`;$('goalProgress').style.width=`${Math.min(100,s.correct/20*100)}%`;
+  $('goalMessage').textContent=s.correct>=20?'🎉 আজকের লক্ষ্য পূরণ! চাইলে আরও অনুশীলন করো।':'২০টি combo শেষ করতে আরও '+(20-s.correct)+'টি বাকি।';
+  $('skillNote').textContent=notes[state.skill];
+  const v=vecs[state.direction],p=perps(v);$('legendText').innerHTML='<b>সামনে:</b> '+g(v)+' &nbsp; <b>পিছনে:</b> '+g(neg(v))+'<br><b>পাশ:</b> '+g(p[0])+' অথবা '+g(p[1])+'<br>Dash-এর দিক এবং Joystick-এর দিক আলাদা input।';
+ }
+ function feedback(message,type){const node=$('feedback');node.textContent=message;node.className='feedback'+(type?' '+type:'')}
+ function changeSelection(){state.phase=0;render();feedback(`${names[state.skill]} • প্রথমে Dash input দাও।`)}
+ function input(id,kind){const stage=id==='dash'?0:1;const e=expected();const arr=stage===0?e.dash:e.joy;
+   if(state.phase===2){feedback('এই combo সম্পন্ন হয়েছে। “নতুন চ্যালেঞ্জ” চাপো।','good');return}
+   if(stage!==state.phase){feedback(stage===1?'আগে Dash-এর নির্দেশটি সম্পন্ন করো।':'Dash ধাপ হয়ে গেছে, এবার Joystick ব্যবহার করো।');return}
+   const isCorrect=stage===0&&e.tap?kind==='tap':kind!=='tap'&&arr.some(v=>g(v)===kind);
+   if(!isCorrect){state.stats.wrong++;state.stats.streak=0;save();render();feedback(`ভুল input: ${kind==='tap'?'Tap':kind}। আবার ${stage===0?'Dash':'Joystick'} চেষ্টা করো।`,'bad');return}
+   state.phase++;
+   if(state.phase===2){state.stats.correct++;state.stats.streak++;save();render();feedback(`দারুণ! ${names[state.skill]}-এর দুই ধাপ সঠিক। ✅ এখন “নতুন চ্যালেঞ্জ” চাপো।`,'good')}
+   else{render();feedback('Dash সঠিক! এবার বাম পাশের Joystick-এ দেখানো দিকে swipe করো।','good')}
+ }
+ function hookPad(id){const el=$(id),trace=$(id+'Trace');let start=null;
+  el.addEventListener('pointerdown',ev=>{if(!ev.isPrimary||ev.button>0)return;start={x:ev.clientX,y:ev.clientY,id:ev.pointerId};el.setPointerCapture(ev.pointerId);el.classList.add('engaged')});
+  el.addEventListener('pointerup',ev=>{if(!start||ev.pointerId!==start.id)return;const dx=ev.clientX-start.x,dy=ev.clientY-start.y;start=null;el.classList.remove('engaged');const dist=Math.hypot(dx,dy);const arrow=dist<24?'tap':Math.abs(dx)>Math.abs(dy)?dx>0?'→':'←':dy>0?'↓':'↑';trace.textContent=arrow==='tap'?'●':arrow;trace.classList.add('visible');window.setTimeout(()=>trace.classList.remove('visible'),300);input(id,arrow)});
+  el.addEventListener('pointercancel',()=>{start=null;el.classList.remove('engaged')});
+  el.addEventListener('keydown',ev=>{const map={ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→',Enter:'tap',' ':'tap'};const a=map[ev.key];if(a){ev.preventDefault();input(id,a)}});
+ }
+ document.querySelectorAll('[data-skill]').forEach(b=>b.addEventListener('click',()=>{state.skill=b.dataset.skill;changeSelection()}));
+ document.querySelectorAll('[data-direction]').forEach(b=>b.addEventListener('click',()=>{state.direction=b.dataset.direction;changeSelection()}));
+ $('retry').addEventListener('click',()=>{state.phase=0;render();feedback('আবার শুরু করা হয়েছে। Dash input দাও।')});
+ $('random').addEventListener('click',()=>{const skills=Object.keys(names),directions=Object.keys(vecs);state.skill=skills[Math.floor(Math.random()*skills.length)];state.direction=directions[Math.floor(Math.random()*directions.length)];changeSelection()});
+ $('challenge').addEventListener('change',ev=>{state.challenge=ev.target.checked;state.phase=0;render();feedback(state.challenge?'চ্যালেঞ্জ মোড চালু: Skill ও চলার দিক দেখে Arrow মনে করার চেষ্টা করো।':'গাইড মোড চালু: Arrow দেখে অনুশীলন করো।')});
+ $('resetStats').addEventListener('click',()=>{if(!window.confirm('আজকের সঠিক/ভুল হিসাব মুছে ফেলবে?'))return;state.stats={correct:0,wrong:0,streak:0};save();render();feedback('আজকের পরিসংখ্যান নতুন করে শুরু হয়েছে।')});
+ $('showHelp').addEventListener('click',()=>{feedback('প্রথমে ডান পাশে Dash-এ Swipe/Tap, তারপর বাম পাশে Joystick Swipe। Player-এর চলার দিক বদলালে Arrow বদলায়।');$('feedback').scrollIntoView({behavior:'smooth',block:'center'})});
+ $('todayDate').textContent=new Intl.DateTimeFormat('bn-BD',{day:'numeric',month:'long'}).format(new Date());
+ load();hookPad('dash');hookPad('joystick');render();
+})();
+</script>
+</body>
+</html>
